@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Undangan Pernikahan - Adam & Marwah</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,700&family=Lora:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Background luar / laptop */
+        body {
+            font-family: 'Lora', serif;
+            background-color: #2b2b2b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* CONTAINER UTAMA (Bisa di-scroll) */
+        .mobile-container {
+            width: 100%;
+            max-width: 480px;
+            height: 100%;
+            background-color: #e3d5ca;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .mobile-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* --- LOGIKA ANIMASI REVEAL 3D --- */
+        .reveal {
+            opacity: 0;
+            transform: perspective(900px) translateY(60px) rotateX(18deg) scale(0.96);
+            transform-origin: bottom center;
+            transition:
+                opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform;
+        }
+
+        /* Class yang akan otomatis terpasang via Javascript saat discroll */
+        .reveal.active {
+            opacity: 1;
+            transform: perspective(900px) translateY(0) rotateX(0deg) scale(1);
+        }
+
+        /* --- SECTION 1: STORY CARD --- */
+        .story-section {
+            padding: 60px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('adam1.jpeg');
+            background-size: cover;
+            background-position: center center;
+            filter: blur(2.5px);
+            transform: scale(1.04);
+            /* Mencegah pinggiran putih akibat efek blur */
+            z-index: 1;
+        }
+
+        /* Overlay gelap di atas foto story-section */
+        .story-section::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.50);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .story-card {
+            background-color: #eee3d8;
+            color: #45413F;
+            width: 100%;
+            border-top-left-radius: 150px;
+            border-top-right-radius: 150px;
+            border-bottom-left-radius: 150px;
+            border-bottom-right-radius: 150px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 2;
+            /* Berada di atas background */
+        }
+
+        @keyframes fadeInOpening {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .story-text {
+            padding: 60px 30px 40px 30px;
+            text-align: center;
+        }
+
+        .story-text h3 {
+            font-style: italic;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+
+        .story-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .story-text p {
+            font-size: 0.9em;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .story-photo {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+        }
+
+        /* --- SECTION 2: PROFIL PENGANTIN (Latar Belakang Beda) --- */
+        .profile-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)), url('adam1.jpeg');
+            background-size: cover;
+            background-position: center center;
+            padding: 80px 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .profile-section .section-title {
+            color: #fff;
+        }
+
+        .profile-section .section-title::after {
+            background-color: #fff;
+        }
+
+        .profile-section .opening-text {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .profile-section .profile-card {
+            background-color: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-section .profile-card h2 {
+            color: #fff;
+        }
+
+        .profile-section .profile-card .birth-info {
+            color: #e8c97e;
+        }
+
+        .profile-section .profile-card p {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .profile-section .profile-card b {
+            color: #fff;
+        }
+
+        .profile-section .ig-icon {
+            fill: #e8c97e;
+        }
+
+        /* --- BACKGROUND GLOBAL: adam1.jpeg --- */
+        .countdown-section,
+        .lovestory-section,
+        .gift-section,
+        .wishes-section,
+        .closing-section {
+            background-image: url('adam1.jpeg') !important;
+            background-size: cover !important;
+            background-position: center center !important;
+            position: relative;
+        }
+
+        /* Overlay gelap untuk semua section dengan background foto */
+        .countdown-section::before,
+        .lovestory-section::before,
+        .gift-section::before,
+        .wishes-section::before,
+        .closing-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.52);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Pastikan konten di dalam section-section tersebut muncul di atas overlay */
+        .countdown-section>*,
+        .lovestory-section>*,
+        .gift-section>*,
+        .wishes-section>*,
+        .closing-section>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- GLASSMORPHISM CARDS & TEXT READABILITY OVERRIDES --- */
+
+        /* 1. Slide 2: Story Card */
+        .story-section .story-card {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(6px) !important;
+            -webkit-backdrop-filter: blur(6px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .story-section .story-text h3 {
+            color: #e8c97e !important;
+        }
+
+        .story-section .story-text h2 {
+            color: #fff !important;
+        }
+
+        .story-section .story-text p {
+            color: rgba(255, 255, 255, 0.85) !important;
+        }
+
+        /* 2. Slide 4: Countdown Section & Event Cards */
+        .countdown-section h2 {
+            color: #fff !important;
+        }
+
+        .countdown-section .section-title::after {
+            background-color: #fff !important;
+        }
+
+        .countdown-section .opening-text {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        .countdown-container .countdown-item {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(6px) !important;
+            -webkit-backdrop-filter: blur(6px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+            color: #fff !important;
+        }
+
+        .countdown-container .countdown-item div {
+            color: #fff !important;
+        }
+
+        .countdown-section .event-card {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(6px) !important;
+            -webkit-backdrop-filter: blur(6px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .countdown-section .event-card h3 {
+            color: #fff !important;
+        }
+
+        .countdown-section .event-card p {
+            color: rgba(255, 255, 255, 0.85) !important;
+        }
+
+        .countdown-section .event-card b {
+            color: #fff !important;
+        }
+
+        .countdown-section .event-card div {
+            color: rgba(255, 255, 255, 0.95) !important;
+        }
+
+        .countdown-section .event-card div[style*="letter-spacing: 2px"] {
+            color: #fff !important;
+        }
+
+        .countdown-section .event-card svg {
+            stroke: #fff !important;
+        }
+
+        .countdown-section .event-card div[style*="background-color: #d6ccbd"] {
+            background-color: rgba(255, 255, 255, 0.25) !important;
+        }
+
+        /* 3. Slide 5: Love Story Section */
+        .lovestory-section h2 {
+            color: #fff !important;
+        }
+
+        .lovestory-section h2 span:first-child {
+            color: #e8c97e !important;
+        }
+
+        .lovestory-section h2 span:last-child {
+            color: #fff !important;
+        }
+
+        .lovestory-section h2 svg {
+            fill: #e8c97e !important;
+        }
+
+        .lovestory-section .story-timeline {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(6px) !important;
+            -webkit-backdrop-filter: blur(6px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+            border-radius: 20px !important;
+            padding: 30px 20px !important;
+        }
+
+        .lovestory-section .story-item h3 {
+            color: #fff !important;
+        }
+
+        .lovestory-section .story-item div {
+            color: #e8c97e !important;
+        }
+
+        .lovestory-section .story-item p {
+            color: rgba(255, 255, 255, 0.85) !important;
+        }
+
+        /* 4. Slide 6: Gallery Section */
+        .gallery-section h2 {
+            color: #fff !important;
+        }
+
+        .gallery-section h2 span:first-child {
+            color: #e8c97e !important;
+        }
+
+        .gallery-section h2 span:last-child {
+            color: #fff !important;
+        }
+
+        .gallery-section h2 svg {
+            fill: #e8c97e !important;
+        }
+
+        /* 5. Slide 7: Gift Section */
+        .gift-section h2 {
+            color: #fff !important;
+        }
+
+        .gift-section h2 span:first-child {
+            color: #e8c97e !important;
+        }
+
+        .gift-section h2 span:last-child {
+            color: #fff !important;
+        }
+
+        .gift-section h2 svg {
+            fill: #e8c97e !important;
+        }
+
+        .gift-section .opening-text {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        /* 6. Slide 8: Wishes Section */
+        .wishes-section h2 {
+            color: #fff !important;
+        }
+
+        .wishes-section h2 span:first-child {
+            color: #e8c97e !important;
+        }
+
+        .wishes-section h2 span:last-child {
+            color: #fff !important;
+        }
+
+        .wishes-section h2 svg {
+            fill: #e8c97e !important;
+        }
+
+        .wishes-section .opening-text {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        .wishes-section .profile-card {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(6px) !important;
+            -webkit-backdrop-filter: blur(6px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .wishes-section .profile-card label {
+            color: #fff !important;
+        }
+
+        .wishes-section .profile-card input,
+        .wishes-section .profile-card select,
+        .wishes-section .profile-card textarea {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            color: #fff !important;
+        }
+
+        .wishes-section .profile-card input::placeholder,
+        .wishes-section .profile-card textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        .wishes-section .profile-card select option {
+            background-color: #2b2b2b !important;
+            color: #fff !important;
+        }
+
+        /* 7. Slide 9: Closing Section */
+        .closing-section .profile-card {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(6px) !important;
+            -webkit-backdrop-filter: blur(6px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .closing-section .profile-card h3 {
+            color: #fff !important;
+        }
+
+        .closing-section .profile-card p {
+            color: rgba(255, 255, 255, 0.85) !important;
+        }
+
+        .closing-section .profile-card div {
+            color: #e8c97e !important;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            /* DIUBAH DIKIT: Biar jarak ke teks pembuka gak terlalu jauh */
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 50px;
+            height: 2px;
+            background-color: #45413F;
+            margin: 15px auto 0;
+        }
+
+        /* --- TAMBAHAN CSS: Teks Pembuka --- */
+        .opening-text {
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: #45413F;
+            margin-bottom: 50px;
+            padding: 0 15px;
+        }
+
+        /* Desain Bingkai Kartu Profil */
+        .profile-card {
+            background-color: #eee3d8;
+            border-radius: 180px;
+            padding: 40px 20px 60px 20px;
+            margin-bottom: 60px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Frame Foto Bulat */
+        .profile-img-frame {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            border: 5px solid #fff;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-img-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6em;
+            margin-bottom: 5px;
+        }
+
+        .profile-card .birth-info {
+            font-size: 0.9em;
+            font-style: italic;
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .profile-card p {
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .profile-card b {
+            color: #45413F;
+        }
+
+        /* --- TAMBAHAN: CSS LOGO INSTAGRAM --- */
+        .ig-link {
+            display: inline-block;
+            margin-top: 45px;
+            transition: transform 0.3s ease;
+        }
+
+        .ig-link:hover {
+            transform: scale(1.1);
+        }
+
+        .ig-icon {
+            width: 32px;
+            height: 32px;
+            fill: #a68c63;
+        }
+
+        /* CSS Untuk Partikel Mengambang */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .particle {
+            position: absolute;
+            background-repeat: no-repeat;
+            background-size: contain;
+            animation: floatUp 10s infinite linear;
+            bottom: -50px;
+            pointer-events: none;
+        }
+
+        /* SVG Bunga & Kelopak */
+        .particle:nth-child(odd) {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='3' fill='%23a68c63'/><circle cx='12' cy='5' r='4' fill='%23a68c63'/><circle cx='12' cy='19' r='4' fill='%23a68c63'/><circle cx='5' cy='12' r='4' fill='%23a68c63'/><circle cx='19' cy='12' r='4' fill='%23a68c63'/></svg>");
+        }
+
+        .particle:nth-child(even) {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a68c63'><path d='M12,4 C12,4 16,9 16,12 C16,14.5 14,16.5 12,16.5 C10,16.5 8,14.5 8,12 C8,9 12,4 12,4 Z'/></svg>");
+        }
+
+        .particle:nth-child(1) {
+            left: 10%;
+            animation-duration: 12s;
+            animation-delay: 0s;
+            width: 25px;
+            height: 25px;
+        }
+
+        .particle:nth-child(2) {
+            left: 25%;
+            animation-duration: 15s;
+            animation-delay: 2s;
+            width: 48px;
+            height: 48px;
+        }
+
+        .particle:nth-child(3) {
+            left: 40%;
+            animation-duration: 11s;
+            animation-delay: 4s;
+            width: 26px;
+            height: 26px;
+        }
+
+        .particle:nth-child(4) {
+            left: 55%;
+            animation-duration: 14s;
+            animation-delay: 1s;
+            width: 52px;
+            height: 52px;
+        }
+
+        .particle:nth-child(5) {
+            left: 70%;
+            animation-duration: 13s;
+            animation-delay: 5s;
+            width: 24px;
+            height: 24px;
+        }
+
+        .particle:nth-child(6) {
+            left: 85%;
+            animation-duration: 16s;
+            animation-delay: 3s;
+            width: 45px;
+            height: 45px;
+        }
+
+        .particle:nth-child(7) {
+            left: 30%;
+            animation-duration: 18s;
+            animation-delay: 6s;
+            width: 28px;
+            height: 28px;
+        }
+
+        .particle:nth-child(8) {
+            left: 75%;
+            animation-duration: 11s;
+            animation-delay: 7s;
+            width: 50px;
+            height: 50px;
+        }
+
+        .particle:nth-child(9) {
+            left: 15%;
+            animation-duration: 13s;
+            animation-delay: 8s;
+            width: 25px;
+            height: 25px;
+        }
+
+        .particle:nth-child(10) {
+            left: 35%;
+            animation-duration: 16s;
+            animation-delay: 9s;
+            width: 55px;
+            height: 55px;
+        }
+
+        .particle:nth-child(11) {
+            left: 50%;
+            animation-duration: 12s;
+            animation-delay: 10s;
+            width: 21px;
+            height: 21px;
+        }
+
+        .particle:nth-child(12) {
+            left: 65%;
+            animation-duration: 17s;
+            animation-delay: 11s;
+            width: 47px;
+            height: 47px;
+        }
+
+        .particle:nth-child(13) {
+            left: 80%;
+            animation-duration: 14s;
+            animation-delay: 12s;
+            width: 17px;
+            height: 17px;
+        }
+
+        .particle:nth-child(14) {
+            left: 20%;
+            animation-duration: 15s;
+            animation-delay: 13s;
+            width: 53px;
+            height: 53px;
+        }
+
+        .particle:nth-child(15) {
+            left: 60%;
+            animation-duration: 18s;
+            animation-delay: 14s;
+            width: 26px;
+            height: 26px;
+        }
+
+        .particle:nth-child(16) {
+            left: 90%;
+            animation-duration: 11s;
+            animation-delay: 15s;
+            width: 46px;
+            height: 46px;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.8) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.22;
+            }
+
+            90% {
+                opacity: 0.22;
+            }
+
+            100% {
+                transform: translateY(-1050px) translateX(50px) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Elemen Partikel Estetik (Global) -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="mobile-container" id="mainScroll">
+
+        <!-- Slide Baru (Paling Atas) -->
+        <div class="cover-section"
+            style="position: relative; overflow: hidden; background-image: url('adam1.jpeg'); background-size: cover; background-position: center center; padding: 60px 20px; text-align: center; color: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+
+            <!-- Overlay Gelap -->
+            <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.45); z-index: 1;"></div>
+
+            <!-- Card Utama -->
+            <div class="profile-card reveal"
+                style="background-color: rgba(255, 255, 255, 0.08); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.2); border-radius: 200px; padding: 120px 35px; margin-bottom: 0; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); position: relative; z-index: 2; width: 100%; max-width: 420px; min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+
+                <h4
+                    style="font-family: 'Arial', sans-serif; font-size: 1.1em; letter-spacing: 3px; color: rgba(255,255,255,0.8); margin-bottom: 30px; text-transform: uppercase;">
+                    The Wedding Of
+                </h4>
+
+                <h1
+                    style="font-family: 'Playfair Display', serif; font-size: 4em; line-height: 1.1; margin-bottom: 40px; color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.4);">
+                    Adam<br>
+                    <span
+                        style="font-size: 0.5em; font-style: italic; color: #e8c97e; display: inline-block; margin: 15px 0;">&</span><br>
+                    Marwah
+                </h1>
+
+                <div
+                    style="font-family: 'Playfair Display', serif; font-size: 1.3em; font-weight: bold; color: rgba(255,255,255,0.9); letter-spacing: 1px; margin-top: 15px; text-shadow: 0 1px 6px rgba(0,0,0,0.3);">
+                    19 Juli 2026
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Slide It Was (Cerita Singkat) -->
+        <div class="story-section">
+            <div class="story-card reveal">
+                <div class="story-text">
+                    <h3>It was</h3>
+                    <h2>Always You</h2>
+                    <p class="arabic-verse"
+                        style="font-size: 1.55em; line-height: 2.2; text-align: center; margin: 25px 0; font-family: 'Lora', 'Playfair Display', serif; direction: rtl;">
+                        وَمِنْ اٰيٰتِهٖٓ اَنْ خَلَقَ لَكُمْ مِّنْ اَنْفُسِكُمْ اَزْوَاجًا لِّتَسْكُنُوْٓا اِلَيْهَا
+                        وَجَعَلَ بَيْنَكُمْ مَّوَدَّةً وَّرَحْمَةًۗ اِنَّ فِيْ ذٰلِكَ لَاٰيٰتٍ لِّقَوْمٍ
+                        يَّتَفَكَّرُوْنَ
+                    </p>
+                    <p style="font-size: 1.0em; line-height: 1.8; margin-bottom: 15px;">
+                        "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari
+                        jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di
+                        antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda
+                        (kebesaran Allah) bagi kaum yang berpikir."
+                    </p>
+                    <p style="font-size: 0.85em; font-weight: bold; color: #e8c97e !important; margin-top: 15px;">
+                        (QS. Ar-Rum : 21)
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-section">
+
+            <h2 class="section-title reveal">Mempelai Pria & Wanita</h2>
+
+            <p class="opening-text reveal">Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i serta
+                kerabat sekalian untuk menghadiri acara pernikahan kami.</p>
+
+            <div class="profile-card reveal">
+                <div class="profile-img-frame">
+                    <img src="adam2.png" alt="Foto Adam">
+                </div>
+                <h2>Dwi Adam Maulana</h2>
+                <div class="birth-info">Jakarta, 27 Mei 2004</div>
+                <p>
+                    Putra Kedua dari <br>
+                    <b>Bpk. H. Budi Purnama</b> & <b>Ibu Neti Herawati</b>
+                </p>
+
+                <a href="https://www.instagram.com/damzzssss?igsh=M3Ixd3AwaTVnc3Bq" target="_blank" class="ig-link">
+                    <svg class="ig-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                    </svg>
+                </a>
+            </div>
+
+            <div class="profile-card reveal" style="margin-bottom: 0;">
+                <div class="profile-img-frame">
+                    <img src="marwah3.png" alt="Foto Marwah">
+                </div>
+                <h2>Ikotul Marwah</h2>
+                <div class="birth-info">Serang, 08 Desember 2004</div>
+                <p>
+                    Putri Pertama dari <br>
+                    <b>Bpk. Sarkani</b> & <b>Ibu Marsah</b>
+                </p>
+
+                <a href="https://www.instagram.com/awwahhhz?igsh=MTY5YXF1NGdybDVxYQ==" target="_blank" class="ig-link">
+                    <svg class="ig-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                    </svg>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="countdown-section"
+            style="background-color: #e3d5ca; padding: 80px 20px; text-align: center; color: #45413F;">
+            <h2 class="section-title reveal">Menuju Hari Bahagia</h2>
+            <p class="opening-text reveal" style="margin-bottom: 30px;">Tidak sabar menanti kehadiran
+                Bapak/Ibu/Saudara/i sekalian.</p>
+            <div class="countdown-container reveal"
+                style="display: flex; justify-content: center; gap: 10px; margin-top: 30px;">
+                <div class="countdown-item"
+                    style="background-color: #eee3d8; padding: 15px 10px; border-radius: 15px; min-width: 75px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <div id="days" style="font-size: 2em; font-weight: bold; font-family: 'Playfair Display', serif;">12
+                    </div>
+                    <div style="font-size: 0.8em; margin-top: 5px;">Hari</div>
+                </div>
+                <div class="countdown-item"
+                    style="background-color: #eee3d8; padding: 15px 10px; border-radius: 15px; min-width: 75px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <div id="hours" style="font-size: 2em; font-weight: bold; font-family: 'Playfair Display', serif;">
+                        00</div>
+                    <div style="font-size: 0.8em; margin-top: 5px;">Jam</div>
+                </div>
+                <div class="countdown-item"
+                    style="background-color: #eee3d8; padding: 15px 10px; border-radius: 15px; min-width: 75px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <div id="minutes"
+                        style="font-size: 2em; font-weight: bold; font-family: 'Playfair Display', serif;">00</div>
+                    <div style="font-size: 0.8em; margin-top: 5px;">Menit</div>
+                </div>
+                <div class="countdown-item"
+                    style="background-color: #eee3d8; padding: 15px 10px; border-radius: 15px; min-width: 75px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <div id="seconds"
+                        style="font-size: 2em; font-weight: bold; font-family: 'Playfair Display', serif;">00</div>
+                    <div style="font-size: 0.8em; margin-top: 5px;">Detik</div>
+                </div>
+            </div>
+
+            <!-- Kartu Akad Nikah -->
+            <div class="event-card reveal"
+                style="background-color: #eee3d8; border-radius: 180px; padding: 60px 20px 70px 20px; margin-top: 60px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); position: relative;">
+
+                <!-- Icon Cincin Sederhana -->
+                <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#a68c63" stroke-width="1.2"
+                    stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 15px;">
+                    <circle cx="9" cy="12" r="5"></circle>
+                    <circle cx="15" cy="12" r="5"></circle>
+                    <path d="M8 7l1 -1 1 1"></path>
+                    <path d="M16 7l-1 -1 -1 1"></path>
+                </svg>
+
+                <h3
+                    style="font-family: 'Playfair Display', serif; font-size: 2.2em; color: #45413F; margin-bottom: 10px;">
+                    Akad Nikah</h3>
+
+                <div style="display: flex; justify-content: center; align-items: center; margin: 30px 0;">
+                    <div style="flex: 1; height: 1px; background-color: #d6ccbd;"></div>
+                    <div style="padding: 0 15px; color: #a68c63;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                            <path d="M12 14 v4 M10 16 h4"></path>
+                        </svg>
+                    </div>
+                    <div style="flex: 1; height: 1px; background-color: #d6ccbd;"></div>
+                </div>
+
+                <div
+                    style="font-family: 'Playfair Display', serif; font-size: 1.4em; color: #45413F; margin-bottom: 15px;">
+                    Minggu, 19 Juli 2026</div>
+                <div style="font-size: 0.95em; color: #777; font-weight: 600; letter-spacing: 2px;">PUKUL 08.00 WIB -
+                    10.00 WIB</div>
+
+                <div style="display: flex; justify-content: center; align-items: center; margin: 30px 0;">
+                    <div style="flex: 1; height: 1px; background-color: #d6ccbd;"></div>
+                    <div style="padding: 0 15px; color: #a68c63;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <div style="flex: 1; height: 1px; background-color: #d6ccbd;"></div>
+                </div>
+
+                <div style="font-size: 1.1em; color: #45413F; font-weight: bold; margin-bottom: 10px;">Kediaman Mempelai
+                    Wanita</div>
+                <div style="font-size: 0.9em; line-height: 1.6; color: #555; padding: 0 10px;">Kp.Cadas, Desa Karet
+                    Rt.005/Rw.001,<br>Sepatan, Kab.Tangerang.</div>
+
+                <a href="https://maps.app.goo.gl/MyjgaNr7am3aLXwc8" target="_blank"
+                    style="display: inline-block; margin-top: 25px; padding: 12px 25px; background-color: #45413F; color: #eee3d8; text-decoration: none; border-radius: 30px; font-size: 0.85em; font-weight: bold; transition: transform 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">Buka
+                    di Peta</a>
+            </div>
+
+            <!-- Kartu Resepsi -->
+            <div class="event-card reveal"
+                style="background-color: #eee3d8; border-radius: 180px; padding: 60px 20px 70px 20px; margin-top: 40px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); position: relative;">
+
+                <!-- Icon Bunga / Resepsi -->
+                <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#a68c63" stroke-width="1.2"
+                    stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 15px;">
+                    <path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.5V12h-4V9.5A4 4 0 0 1 12 2z" />
+                    <path d="M8 6a4 4 0 0 0-4 4c0 1.5.8 2.8 2 3.5L8 15h2v-3" />
+                    <path d="M16 6a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.5L16 15h-2v-3" />
+                    <path d="M10 15v6" />
+                    <path d="M14 15v6" />
+                    <path d="M9 21h6" />
+                </svg>
+
+                <h3
+                    style="font-family: 'Playfair Display', serif; font-size: 2.2em; color: #45413F; margin-bottom: 10px;">
+                    Resepsi</h3>
+
+                <div style="display: flex; justify-content: center; align-items: center; margin: 30px 0;">
+                    <div style="flex: 1; height: 1px; background-color: #d6ccbd;"></div>
+                    <div style="padding: 0 15px; color: #a68c63;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                            <path d="M12 14 v4 M10 16 h4"></path>
+                        </svg>
+                    </div>
+                    <div style="flex: 1; height: 1px; background-color: #d6ccbd;"></div>
+                </div>
+
+                <div
+                    style="font-family: 'Playfair Display', serif; font-size: 1.4em; color: #45413F; margin-bottom: 15px;">
+                    Minggu, 19 Juli 2026</div>
+                <div style="font-size: 0.95em; color: #777; font-weight: 600; letter-spacing: 2px;">PUKUL 10.00 WIB -
+                    16.00 WIB</div>
+
+                <div style="display: flex; justify-content: center; align-items: center; margin: 30px 0;">
+                    <div style="flex: 1; height: 1px; background-color: #d6ccbd;"></div>
+                    <div style="padding: 0 15px; color: #a68c63;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <div style="flex: 1; height: 1px; background-color: #d6ccbd;"></div>
+                </div>
+
+                <div style="font-size: 1.1em; color: #45413F; font-weight: bold; margin-bottom: 10px;">Kediaman Mempelai
+                    Wanita</div>
+                <div style="font-size: 0.9em; line-height: 1.6; color: #555; padding: 0 10px;">Kp.Cadas, Desa Karet,
+                    Rt.005/Rw.001,<br>Sepatan, Kab.Tangerang.</div>
+
+                <a href="https://maps.app.goo.gl/MyjgaNr7am3aLXwc8" target="_blank"
+                    style="display: inline-block; margin-top: 25px; padding: 12px 25px; background-color: #45413F; color: #eee3d8; text-decoration: none; border-radius: 30px; font-size: 0.85em; font-weight: bold; transition: transform 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">Buka
+                    di Peta</a>
+            </div>
+
+        </div>
+
+        <!-- Slide 4: Our Love Story -->
+        <div class="lovestory-section"
+            style="background-color: #d6ccbd; padding: 80px 20px; text-align: center; color: #45413F;">
+            <h2 class="reveal"
+                style="font-family: 'Playfair Display', serif; font-size: 2.2em; line-height: 1.2; margin-bottom: 40px; position: relative; color: #45413F;">
+                <span style="display: block; font-style: italic; color: #777; margin-bottom: 5px;">Our</span>
+                <span style="display: block;">Love Story</span>
+
+                <svg width="120" height="30" viewBox="0 0 120 30"
+                    style="margin: 15px auto 0; display: block; fill: #a68c63;">
+                    <path d="M60,15 C52,5 42,8 40,15 C42,22 52,25 60,15 Z" />
+                    <path d="M60,15 C68,5 78,8 80,15 C78,22 68,25 60,15 Z" />
+                    <circle cx="60" cy="15" r="2.5" fill="#45413F" />
+                    <path d="M20,15 L40,15" stroke="#a68c63" stroke-width="1" stroke-linecap="round" />
+                    <path d="M80,15 L100,15" stroke="#a68c63" stroke-width="1" stroke-linecap="round" />
+                    <circle cx="15" cy="15" r="1.5" fill="#a68c63" />
+                    <circle cx="105" cy="15" r="1.5" fill="#a68c63" />
+                </svg>
+            </h2>
+
+            <img src="adam1.jpeg" alt="Our Love Story" class="reveal"
+                style="width: 90%; max-width: 380px; aspect-ratio: 1/1; object-fit: cover; border-radius: 25px; box-shadow: 0 12px 30px rgba(0,0,0,0.15); margin-bottom: 60px; display: block; margin-left: auto; margin-right: auto;">
+
+            <div class="story-timeline reveal"
+                style="text-align: center; margin: 0 auto; max-width: 420px; padding: 0 10px;">
+
+                <div class="story-item" style="margin-bottom: 50px;">
+                    <h3
+                        style="font-family: 'Playfair Display', serif; font-size: 1.5em; color: #45413F; margin-bottom: 5px;">
+                        Awal Cerita</h3>
+                    <div
+                        style="font-size: 0.85em; font-weight: bold; color: #e8c97e; margin-bottom: 12px; letter-spacing: 1px;">
+                        JANUARI 2026</div>
+                    <p style="font-size: 1.0em; line-height: 1.7; color: #555; font-weight: bold;">pertemuan kami di
+                        mulai dari suatu pekerjaan, berawal tugas dari atasan yang tanpa sengaja mempertemukan kami.
+                        obrolan, canda dan tawa yang singkat kini berubah menjadi obrolan panjang tentang mimpi dan
+                        harapan.
+                        berjalannya hari ke hari kami merasakan sifat, sikap, dan perlakuan yang bisa bikin diri sendiri
+                        lebih aman, nyaman, tentram dan selalu merindukan tempat pulang pada pasangannya.
+                        .</p>
+                </div>
+
+                <div class="story-item" style="margin-bottom: 50px;">
+                    <h3
+                        style="font-family: 'Playfair Display', serif; font-size: 1.5em; color: #45413F; margin-bottom: 5px;">
+                        Lamaran</h3>
+                    <div
+                        style="font-size: 0.85em; font-weight: bold; color: #e8c97e; margin-bottom: 12px; letter-spacing: 1px;">
+                        18 JUNI 2026</div>
+                    <p style="font-size: 1.0em; line-height: 1.7; color: #555; font-weight: bold;">Setiap malam, kami
+                        selalu berdoa agar Allah mengirimkan pendamping yang menjaga agama dan membawa ketenangan dalam
+                        hidup. Doa itu dijawab dengan cara yang tidak pernah kami bayangkan.
+                        setelah meminta restu kepada kedua orang tua kami, dan tidak henti hentinya kami untuk slalu
+                        ikhtiar dan berdoa kepada allah, hari ini pada tanggal 18 juni 2026 di tempat kediamannya
+                        perempuan, dengan di ikuti keadaan alam gerimis rintik rintik yang membuat kondisi semakin
+                        tenang dan syahdu.
+                        saya mengungkapkan isi hati sedalam-dalamnya bahwa "saya dan marwah akan slalu bersama sama
+                        belajar, berusaha dan berdoa untuk hidup berumah tangga yang baik".</p>
+                </div>
+
+                <div class="story-item" style="margin-bottom: 20px;">
+                    <h3
+                        style="font-family: 'Playfair Display', serif; font-size: 1.5em; color: #45413F; margin-bottom: 5px;">
+                        Pernikahan</h3>
+                    <div
+                        style="font-size: 0.85em; font-weight: bold; color: #e8c97e; margin-bottom: 12px; letter-spacing: 1px;">
+                        19 JULI 2026</div>
+                    <p style="font-size: 1.0em; line-height: 1.7; color: #555; font-weight: bold;">kini di titik ini ,
+                        kami dengan izin allah membuka lembaran baru bersama, melangkah bersama, berusaha bersama untuk
+                        mewujudkan mimpi dan harapan kami dari awal yaitu menciptakan keluarga yang sakinah mawadah
+                        warohmah, harmonis, humoris dan romantis.
+                        "Karena cinta datang tanpa diduga, kami mengundangmu menjadi saksi awal kisah indah kami.".</p>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <!-- Slide Baru: Wedding Gift -->
+        <div class="gift-section"
+            style="background-color: #d6ccbd; padding: 80px 20px; text-align: center; color: #45413F;">
+            <h2 class="reveal"
+                style="font-family: 'Playfair Display', serif; font-size: 2.2em; line-height: 1.2; margin-bottom: 40px; position: relative; color: #45413F;">
+                <span style="display: block; font-style: italic; color: #777; margin-bottom: 5px;">Wedding</span>
+                <span style="display: block;">Gift</span>
+
+                <svg width="120" height="30" viewBox="0 0 120 30"
+                    style="margin: 15px auto 0; display: block; fill: #a68c63;">
+                    <path d="M60,15 C52,5 42,8 40,15 C42,22 52,25 60,15 Z" />
+                    <path d="M60,15 C68,5 78,8 80,15 C78,22 68,25 60,15 Z" />
+                    <circle cx="60" cy="15" r="2.5" fill="#45413F" />
+                    <path d="M20,15 L40,15" stroke="#a68c63" stroke-width="1" stroke-linecap="round" />
+                    <path d="M80,15 L100,15" stroke="#a68c63" stroke-width="1" stroke-linecap="round" />
+                    <circle cx="15" cy="15" r="1.5" fill="#a68c63" />
+                    <circle cx="105" cy="15" r="1.5" fill="#a68c63" />
+                </svg>
+            </h2>
+
+            <p class="opening-text reveal" style="margin-bottom: 40px; text-align: center;">
+                Tanpa mengurangi rasa hormat, bagi Bapak/Ibu/Saudara/i yang ingin memberikan tanda kasih untuk kami,
+                dapat melalui rekening/e-wallet di bawah ini:
+            </p>
+
+            <!-- Container Kartu-Kartu -->
+            <div class="gift-cards-container reveal"
+                style="display: flex; flex-direction: column; align-items: center; gap: 30px; max-width: 480px; margin: 0 auto; padding: 0 10px;">
+
+                <!-- Kartu Bank BCA -->
+                <div class="bank-card"
+                    style="width: 100%; max-width: 360px; aspect-ratio: 1.586/1; background: linear-gradient(135deg, #45413f 0%, #2b2b2b 100%); border-radius: 16px; padding: 24px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25); text-align: left; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+                    <!-- Efek kilau hologram / gradasi tipis -->
+                    <div
+                        style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%); pointer-events: none;">
+                    </div>
+
+                    <!-- Bagian Atas: Chip dan Logo Bank -->
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <!-- SVG Chip Kartu Gold -->
+                        <svg width="45" height="35" viewBox="0 0 45 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="45" height="35" rx="6" fill="#d4af37" fill-opacity="0.8" />
+                            <rect x="4" y="4" width="37" height="27" rx="4" stroke="#5a4100" stroke-width="1.2"
+                                stroke-opacity="0.3" />
+                            <line x1="15" y1="4" x2="15" y2="31" stroke="#5a4100" stroke-width="1.2"
+                                stroke-opacity="0.3" />
+                            <line x1="30" y1="4" x2="30" y2="31" stroke="#5a4100" stroke-width="1.2"
+                                stroke-opacity="0.3" />
+                            <line x1="4" y1="17.5" x2="41" y2="17.5" stroke="#5a4100" stroke-width="1.2"
+                                stroke-opacity="0.3" />
+                        </svg>
+
+                        <!-- Nama Bank -->
+                        <div
+                            style="font-family: 'Arial', sans-serif; font-weight: bold; font-style: italic; font-size: 1.4em; color: #eee3d8; letter-spacing: 1px;">
+                            BCA</div>
+                    </div>
+
+                    <!-- Bagian Tengah: Nomor Rekening -->
+                    <div>
+                        <div
+                            style="font-size: 0.75em; color: #a68c63; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">
+                            Nomor Rekening</div>
+                        <div
+                            style="font-family: 'Courier New', Courier, monospace; font-size: 1.5em; font-weight: bold; color: #eee3d8; letter-spacing: 2px;">
+                            7295 5432 56
+                        </div>
+                    </div>
+
+                    <!-- Bagian Bawah: Nama Pemilik -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div>
+                            <div
+                                style="font-size: 0.75em; color: #a68c63; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 3px;">
+                                Pemilik Rekening</div>
+                            <div
+                                style="font-family: 'Lora', serif; font-size: 1em; font-weight: bold; color: #eee3d8; letter-spacing: 1px;">
+                                IKOTUL MARWAH</div>
+                        </div>
+
+                        <!-- Tombol Salin -->
+                        <button onclick="copyAccount('7295543256', this)"
+                            style="background-color: #eee3d8; color: #45413f; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.8em; font-weight: bold; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 5px; outline: none;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span>Salin</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kartu E-Wallet DANA -->
+                <div class="bank-card"
+                    style="width: 100%; max-width: 360px; aspect-ratio: 1.586/1; background: linear-gradient(135deg, #1d6199 0%, #104270 100%); border-radius: 16px; padding: 24px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25); text-align: left; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+                    <!-- Efek kilau hologram / gradasi tipis -->
+                    <div
+                        style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%); pointer-events: none;">
+                    </div>
+
+                    <!-- Bagian Atas: Chip dan Logo E-Wallet -->
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <!-- SVG Chip Kartu Gold -->
+                        <svg width="45" height="35" viewBox="0 0 45 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="45" height="35" rx="6" fill="#d4af37" fill-opacity="0.8" />
+                            <rect x="4" y="4" width="37" height="27" rx="4" stroke="#5a4100" stroke-width="1.2"
+                                stroke-opacity="0.3" />
+                            <line x1="15" y1="4" x2="15" y2="31" stroke="#5a4100" stroke-width="1.2"
+                                stroke-opacity="0.3" />
+                            <line x1="30" y1="4" x2="30" y2="31" stroke="#5a4100" stroke-width="1.2"
+                                stroke-opacity="0.3" />
+                            <line x1="4" y1="17.5" x2="41" y2="17.5" stroke="#5a4100" stroke-width="1.2"
+                                stroke-opacity="0.3" />
+                        </svg>
+
+                        <!-- Nama E-wallet -->
+                        <div
+                            style="font-family: 'Arial', sans-serif; font-weight: bold; font-size: 1.4em; color: #eee3d8; letter-spacing: 1px;">
+                            DANA</div>
+                    </div>
+
+                    <!-- Bagian Tengah: Nomor E-Wallet -->
+                    <div>
+                        <div
+                            style="font-size: 0.75em; color: #8ab6dc; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">
+                            Nomor E-Wallet</div>
+                        <div
+                            style="font-family: 'Courier New', Courier, monospace; font-size: 1.5em; font-weight: bold; color: #eee3d8; letter-spacing: 2px;">
+                            0895 2555 6413
+                        </div>
+                    </div>
+
+                    <!-- Bagian Bawah: Nama Pemilik -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div>
+                            <div
+                                style="font-size: 0.75em; color: #8ab6dc; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 3px;">
+                                Penerima</div>
+                            <div
+                                style="font-family: 'Lora', serif; font-size: 1em; font-weight: bold; color: #eee3d8; letter-spacing: 1px;">
+                                IKOTUL MARWAH</div>
+                        </div>
+
+                        <!-- Tombol Salin -->
+                        <button onclick="copyAccount('089525556413', this)"
+                            style="background-color: #eee3d8; color: #104270; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.8em; font-weight: bold; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 5px; outline: none;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span>Salin</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Slide Baru: Ucapan & Doa -->
+        <div class="wishes-section"
+            style="background-color: #e3d5ca; padding: 80px 20px; text-align: center; color: #45413F;">
+            <h2 class="reveal"
+                style="font-family: 'Playfair Display', serif; font-size: 2.2em; line-height: 1.2; margin-bottom: 40px; position: relative; color: #45413F;">
+                <span style="display: block; font-style: italic; color: #777; margin-bottom: 5px;">Wishes &</span>
+                <span style="display: block;">Prayers</span>
+
+                <svg width="120" height="30" viewBox="0 0 120 30"
+                    style="margin: 15px auto 0; display: block; fill: #a68c63;">
+                    <path d="M60,15 C52,5 42,8 40,15 C42,22 52,25 60,15 Z" />
+                    <path d="M60,15 C68,5 78,8 80,15 C78,22 68,25 60,15 Z" />
+                    <circle cx="60" cy="15" r="2.5" fill="#45413F" />
+                    <path d="M20,15 L40,15" stroke="#a68c63" stroke-width="1" stroke-linecap="round" />
+                    <path d="M80,15 L100,15" stroke="#a68c63" stroke-width="1" stroke-linecap="round" />
+                    <circle cx="15" cy="15" r="1.5" fill="#a68c63" />
+                    <circle cx="105" cy="15" r="1.5" fill="#a68c63" />
+                </svg>
+            </h2>
+
+            <p class="opening-text reveal" style="margin-bottom: 30px; text-align: center;">
+                Berikan ucapan selamat dan doa restu Anda untuk mengiringi langkah baru kami.
+            </p>
+
+            <div class="profile-card reveal"
+                style="background-color: #eee3d8; border-radius: 30px; padding: 40px 25px; margin-bottom: 0; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); max-width: 440px; margin: 0 auto; text-align: left;">
+                <form id="wishesForm" onsubmit="sendWishes(event)">
+
+                    <div style="margin-bottom: 20px;">
+                        <label for="guestName"
+                            style="display: block; font-size: 0.9em; font-weight: bold; color: #45413F; margin-bottom: 8px;">Nama
+                            Lengkap</label>
+                        <input type="text" id="guestName" required placeholder="Masukkan nama Anda"
+                            style="width: 100%; padding: 12px 15px; border: 1px solid #d6ccbd; border-radius: 12px; background-color: #fcf9f6; font-family: 'Lora', serif; font-size: 0.95em; color: #45413F; outline: none; box-sizing: border-box; transition: border-color 0.3s;">
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label for="attendance"
+                            style="display: block; font-size: 0.9em; font-weight: bold; color: #45413F; margin-bottom: 8px;">Status
+                            Kehadiran</label>
+                        <select id="attendance" required
+                            style="width: 100%; padding: 12px 15px; border: 1px solid #d6ccbd; border-radius: 12px; background-color: #fcf9f6; font-family: 'Lora', serif; font-size: 0.95em; color: #45413F; outline: none; box-sizing: border-box; transition: border-color 0.3s;">
+                            <option value="" disabled selected>Pilih Kehadiran</option>
+                            <option value="Hadir">Saya Akan Hadir</option>
+                            <option value="Tidak Hadir">Maaf, Saya Tidak Bisa Hadir</option>
+                            <option value="Masih Ragu">Masih Ragu / Belum Pasti</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 25px;">
+                        <label for="wishesMessage"
+                            style="display: block; font-size: 0.9em; font-weight: bold; color: #45413F; margin-bottom: 8px;">Ucapan
+                            & Doa</label>
+                        <textarea id="wishesMessage" required rows="4" placeholder="Tulis ucapan & doa restu Anda..."
+                            style="width: 100%; padding: 12px 15px; border: 1px solid #d6ccbd; border-radius: 12px; background-color: #fcf9f6; font-family: 'Lora', serif; font-size: 0.95em; color: #45413F; outline: none; resize: vertical; box-sizing: border-box; transition: border-color 0.3s;"></textarea>
+                    </div>
+
+                    <button type="submit"
+                        style="width: 100%; padding: 15px; background-color: #45413F; color: #eee3d8; border: none; border-radius: 30px; font-size: 0.95em; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; gap: 8px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 2L11 13"></path>
+                            <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+                        </svg>
+                        Kirim Ucapan (WhatsApp)
+                    </button>
+
+                </form>
+            </div>
+        </div>
+
+        <!-- Slide 6: Penutup -->
+        <div class="closing-section"
+            style="background-color: #d6ccbd; padding: 100px 20px 120px 20px; text-align: center; color: #45413F;">
+
+            <div class="profile-card reveal"
+                style="background-color: #eee3d8; border-radius: 180px; padding: 50px 25px 70px 25px; margin-bottom: 0; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);">
+                <div class="profile-img-frame"
+                    style="width: 180px; height: 180px; margin: 0 auto 30px; border-radius: 50%; border: 5px solid #fff; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
+                    <img src="adam1.jpeg" alt="Closing Photo" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+
+                <h3
+                    style="font-family: 'Playfair Display', serif; font-size: 1.8em; margin-bottom: 25px; color: #45413F;">
+                    Terima Kasih</h3>
+
+                <p style="font-size: 0.95em; line-height: 1.8; color: #555;">
+                    Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila Bapak/Ibu/Saudara/i berkenan hadir dan
+                    memberikan do'a restu. Atas kehadiran dan do'a restunya, kami mengucapkan terima kasih.
+                </p>
+
+                <div
+                    style="font-family: 'Playfair Display', serif; font-size: 1.6em; margin-top: 40px; color: #a68c63; font-style: italic;">
+                    Adam & Marwah
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <audio id="bg-music" loop preload="auto">
+        <source src="song.mp3" type="audio/mpeg">
+        <source src="song.mp3" type="audio/ogg">
+    </audio>
+
+    <script>
+        const reveals = document.querySelectorAll('.reveal');
+
+        const observerOptions = {
+            root: document.getElementById('mainScroll'),
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        reveals.forEach(reveal => {
+            observer.observe(reveal);
+        });
+
+        // Countdown Timer — target tetap: 19 Juli 2026 pukul 08:00 WIB (UTC+7)
+        const targetDate = new Date('2026-07-19T08:00:00+07:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance <= 0) {
+                document.getElementById("days").innerText = "0";
+                document.getElementById("hours").innerText = "00";
+                document.getElementById("minutes").innerText = "00";
+                document.getElementById("seconds").innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days;
+            document.getElementById("hours").innerText = hours < 10 ? '0' + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
+        }
+
+        // Jalankan sekali langsung agar tidak ada jeda 1 detik di awal
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Music Logic
+        const audio = document.getElementById('bg-music');
+        let audioUnlocked = false;
+
+        // Pulihkan posisi lagu jika ada
+        const savedTime = sessionStorage.getItem('bgm_time');
+        if (savedTime) {
+            audio.currentTime = parseFloat(savedTime);
+        }
+
+        // Mulai preload segera
+        audio.load();
+
+        function attemptPlay() {
+            if (!audioUnlocked) return;
+            audio.play().then(() => {
+                sessionStorage.setItem('bgm_playing', 'true');
+            }).catch(() => { });
+        }
+
+        // Tandai audio sudah cukup di-buffer untuk diputar tanpa jeda
+        audio.addEventListener('canplaythrough', () => {
+            if (audioUnlocked) attemptPlay();
+        });
+
+        // Fungsi unlock audio (hanya sekali dibutuhkan, terutama untuk iOS/Safari)
+        function unlockAudio() {
+            if (audioUnlocked) return;
+            audioUnlocked = true;
+            audio.load();
+            attemptPlay();
+            document.removeEventListener('touchstart', unlockAudio, true);
+            document.removeEventListener('touchend', unlockAudio, true);
+            document.removeEventListener('click', unlockAudio, true);
+        }
+
+        // Coba autoplay langsung (berhasil di Chrome Android)
+        audio.play().then(() => {
+            audioUnlocked = true;
+            sessionStorage.setItem('bgm_playing', 'true');
+        }).catch(() => {
+            // Diblokir browser — tunggu interaksi pertama user
+            document.addEventListener('touchstart', unlockAudio, true);
+            document.addEventListener('touchend', unlockAudio, true);
+            document.addEventListener('click', unlockAudio, true);
+        });
+
+        // Simpan posisi lagu setiap 500ms
+        setInterval(() => {
+            if (!audio.paused) {
+                sessionStorage.setItem('bgm_time', audio.currentTime);
+            }
+        }, 500);
+
+        // Pause/Resume lagu sesuai status tab
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                audio.pause();
+            } else if (sessionStorage.getItem('bgm_playing') === 'true') {
+                attemptPlay();
+            }
+        });
+
+        // Pause saat user keluar/navigasi dari halaman
+        window.addEventListener('pagehide', () => {
+            audio.pause();
+        });
+
+        // Copy Account function
+        function copyAccount(text, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                const textSpan = button.querySelector('span');
+                const originalText = textSpan.innerText;
+                textSpan.innerText = 'Tersalin!';
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    textSpan.innerText = originalText;
+                    button.style.transform = 'scale(1)';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // WhatsApp Wish function
+        function sendWishes(event) {
+            event.preventDefault();
+            const name = document.getElementById('guestName').value;
+            const attendance = document.getElementById('attendance').value;
+            const message = document.getElementById('wishesMessage').value;
+
+            // Template pesan WhatsApp
+            const text = `Halo Adam & Marwah,\n\nSaya ingin mengucapkan selamat atas pernikahan kalian!\n\n*Nama:* ${name}\n*Kehadiran:* ${attendance}\n*Ucapan & Doa:* ${message}`;
+
+            const phone = "6289525556413"; // No Ikotul Marwah dalam format internasional
+            const waUrl = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(text)}`;
+
+            window.open(waUrl, '_blank');
+        }
+    </script>
+</body>
+
+</html>
